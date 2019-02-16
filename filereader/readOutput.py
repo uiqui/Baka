@@ -10,7 +10,7 @@ def printArr(instance):
 def fetchData():
     wifiInstanceOfData = []; #wifi
     #clientInstanceOfData = []; #client
-    with open("/root/myOutput-01.csv","r") as f:
+    with open("/root/Output-01.csv","r") as f:
         for line in f:
             if line is not "\n":   #ignore empty lines             
                 cells = line.split(",");                
