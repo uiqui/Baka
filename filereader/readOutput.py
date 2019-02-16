@@ -7,33 +7,39 @@ def printArr(instance):
         print("\n");
     print("///////////////////////////////////////");
     return;
-
-#beginingOfTable = "Station MAC".strip();
-
-while True:
+def fetchData():
     wifiInstanceOfData = []; #wifi
-    clientInstanceOfData = []; #client
+    #clientInstanceOfData = []; #client
     with open("/root/myOutput-01.csv","r") as f:
         for line in f:
             if line is not "\n":   #ignore empty lines             
                 cells = line.split(",");                
-                i=0;
-                length = len(cells);
-                #print(length);
                 
-                while i < length:#go trough sliced line and remove white spaces
-                    cells[i] = cells[i].strip();
-                    i=i+1;
-                    
-                if length == 15:#check what table should put info
+                i = len(cells) - 1;#length
+                length = i;
+                while i >= 0:#go trough sliced line and remove white spaces
+
+                    if i == 0 or i == 1 :#or i==13: #13 for essid
+                        cells[i] = cells[i].strip();
+                    else:
+                        cells.pop(i);
+                    i=i-1;
+
+                if length == 14:#check what table should put info
                     wifiInstanceOfData.append(cells);
-                else:
-                    clientInstanceOfData.append(cells);
+                #else:
+                    #clientInstanceOfData.append(cells);
                     
     #printArr(wifiInstanceOfData);
-    #printArr(oldInstanceOfData);
+    #printArr(clientInstanceOfData);
 
     f.close();
+    wifiInstanceOfData.pop(0);
+    return wifiInstanceOfData;
+#MAIN thread
+
+#while True:
+    #printArr(fetchData());    
     #remove for infinite loop
     #time.sleep(60);
-    break;
+#    break;
