@@ -19,7 +19,7 @@ def fetchData():
                 length = i;
                 while i >= 0:#go trough sliced line and remove white spaces
 
-                    if i == 0 or i == 1 :#or i==13: #13 for essid
+                    if i == 0 or i == 8 or i==13: #0 mac #1 #13 essid
                         cells[i] = cells[i].strip();
                     else:
                         cells.pop(i);

@@ -8,7 +8,7 @@ from flask_restful import Resource, Api;
 ########################################
 #import data reader
 import sys;
-sys.path.append('/root/Documents/project/filereader');
+sys.path.append('/root/Documents/project/coreFunc');
 from readOutput import fetchData;
 ########################################
 #basic system functions
