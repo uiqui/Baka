@@ -29,12 +29,14 @@ def data():
     return "<html><body><h1>"+ json.dumps(fetchData()) +"</h1></body></html>";
 
 @app.route('/halt', methods=['POST','GET'])
-def halt():   
-    return "<html><body><h1>Executed 1</h1></body></html>";
+def halt_serv():  
+    halt(); 
+    return '0';
 
 @app.route('/reboot', methods=['POST','GET'])
-def reboot():   
-    return "<html><body><h1>Executed 2</h1></body></html>";
+def reboot_serv():
+    reboot();   
+    return '0';
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=6976,debug=True);#,threaded=True);

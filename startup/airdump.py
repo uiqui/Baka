@@ -1,6 +1,4 @@
 import os;
-import subprocess;
-import time;
 
 os.system("rm /root/Output-01.csv");
 #settup monitor
