@@ -35,13 +35,13 @@ def calculateDistance(f,fspl):
     f = float(f);
     f = math.log10(f);
     fspl = float(fspl);
+    fspl = abs(fspl);
     #print(f);
     #print(fspl);
     f = 20 * f;
     c = float(92.45);
     exp = float(float(fspl) - f - c)/20;
     exp = exp + 3;    #m --> km
-    print(math.pow(10,-5));
     d = float(math.pow(10,exp));
     return d;
 
