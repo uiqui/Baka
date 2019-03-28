@@ -1,14 +1,20 @@
 import time;
 import os;
 import math;
+import json;
+import urllib.request;
+from threading import Thread;
 
 def printArr(instance):
     for cell in instance:
         for celll in cell:
             print(str(celll) + "/");
-        print("\n");
+        print("");
     print("///////////////////////////////////////");
     return;
+
+def wifiMon():
+    os.system("python /root/Documents/project/startup/airdump.py");
 
 def getChannel():
     result =[];
@@ -17,11 +23,12 @@ def getChannel():
     splitLine = str.split("\n");
     splitLine.pop(0);
     splitLine.pop(len(splitLine)-1);
+    splitLine.pop(len(splitLine)-1);
+
     for line in splitLine:
         line = line.strip();
         line = line[8:(len(line)-3)];
         splitWords = line.split(" : ");
-        
         if splitWords[0][0] is '0':
             splitWords[0] = splitWords[0][1:];
         result.append(splitWords);
@@ -36,12 +43,10 @@ def calculateDistance(f,fspl):
     f = math.log10(f);
     fspl = float(fspl);
     fspl = abs(fspl);
-    #print(f);
-    #print(fspl);
     f = 20 * f;
     c = float(92.45);
     exp = float(float(fspl) - f - c)/20;
-    exp = exp + 3;    #m --> km
+    exp = exp + 3;    #km --> m
     d = float(math.pow(10,exp));
     return d;
 
@@ -73,17 +78,37 @@ def fetchData():
                     wifiInstanceOfData.append(cells);
 
     f.close();
+    if not wifiInstanceOfData:
+        return;
     wifiInstanceOfData.pop(0);
 
     i = len(wifiInstanceOfData)-1;
-    while i!= 0:
-        if wifiInstanceOfData[i][2] != -1:
-            dist = calculateDistance(wifiInstanceOfData[i][1],wifiInstanceOfData[i][2]);
-            wifiInstanceOfData[i].append(dist);
+    while i!= -1:
+        if wifiInstanceOfData[i][1].strip() == '-1' or wifiInstanceOfData[i][2].strip() == '-1':
+            del wifiInstanceOfData[i];           
         else:
-            wifiInstanceOfData.pop(i);
-        i = i -1;
-    
-    return wifiInstanceOfData;
-print();
-printArr(fetchData());
+            dist = calculateDistance(wifiInstanceOfData[i][1],wifiInstanceOfData[i][2]);
+            wifiInstanceOfData[i].pop(1);
+            wifiInstanceOfData[i].pop(1);
+            wifiInstanceOfData[i].append(dist);
+        i = i - 1;
+    #printArr(wifiInstanceOfData);
+    try:
+        postRequest(wifiInstanceOfData);
+    except:
+        return;
+def postRequest(instance):
+    params = json.dumps(instance).encode('utf8');
+    url = 'http://iolab.sk:8033/~venczel/jsonTest.php';
+    req = urllib.request.Request(url,data=params,headers={'content-type': 'application/json'});
+    response = urllib.request.urlopen(req);
+    #print(response.read().decode('utf8'));
+
+
+
+t = Thread(target=wifiMon);
+t.start();
+
+while True:
+    fetchData();
+    time.sleep(10);
