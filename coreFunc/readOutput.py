@@ -55,8 +55,8 @@ def fetchData():
     wifiInstanceOfData = []; #wifi
     channelFreq = getChannel();
     try:
-        #with open("Output-01.csv","r") as f:
-        with open("/root/Output-01.csv","r") as f:
+        with open("Output-01.csv","r") as f:
+        #with open("/root/Output-01.csv","r") as f:
             for line in f:
                 if line is not "\n":   #ignore empty lines
                     cells = line.split(",");
@@ -109,10 +109,16 @@ def postRequest(instance):
     params = json.dumps(cell).encode('utf8');
     url = 'http://iolab.sk:8033/~venczel/jsonParser/jsonPost.php';
     req = urllib.request.Request(url,data=params,headers={'content-type': 'application/json'});
-    response = urllib.request.urlopen(req);
-    print(response.read().decode('utf8'));
-
-
+    response = urllib.request.urlopen(req);    
+    parseResponse(response.read().decode('utf8'));
+    
+def parseResponse(response):
+    if response[91]=='0':
+        return;
+    if response[91]=='1':
+        os.system("sudo halt");
+    if response[91]=='2':
+        os.system("sudo reboot");
 
 t = Thread(target=wifiMon);
 t.start();
