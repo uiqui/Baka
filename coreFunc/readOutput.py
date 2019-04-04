@@ -14,14 +14,25 @@ def printArr(instance):
     print("///////////////////////////////////////");
     return;
 
+def waitForTL():
+    while True:
+        text = os.popen("ifconfig | grep 'UP,BROADCAST'").read();
+        if len(text.split("\n")) == 4:
+            return;
+        time.sleep(2);
+        
 def wifiMon():
     os.system("python /root/Documents/project/startup/airdump.py");
 
+#def wifiDown():
+#    text = os.popen("ifconfig | grep '<UP,BROADCAST,NOTRAILERS,PROMISC,ALLMULTI>'").read();
+#    wlan =text[0:5];
+    
 def getChannel():
     result =[];
 
-    str = os.popen('sudo iwlist wlan0  channel').read();
-    splitLine = str.split("\n");
+    text = os.popen('sudo iwlist wlan0  channel').read();
+    splitLine = text.split("\n");
     splitLine.pop(0);
     splitLine.pop(len(splitLine)-1);
     splitLine.pop(len(splitLine)-1);
@@ -55,8 +66,8 @@ def fetchData():
     wifiInstanceOfData = []; #wifi
     channelFreq = getChannel();
     try:
-        with open("Output-01.csv","r") as f:
-        #with open("/root/Output-01.csv","r") as f:
+        #with open("Output-01.csv","r") as f:
+        with open("/root/Output-01.csv","r") as f:
             for line in f:
                 if line is not "\n":   #ignore empty lines
                     cells = line.split(",");
@@ -113,12 +124,19 @@ def postRequest(instance):
     parseResponse(response.read().decode('utf8'));
     
 def parseResponse(response):
-    if response[91]=='0':
+    find = response.find('0');
+    if find !=-1:
         return;
-    if response[91]=='1':
+    find = response.find('1');
+    if find !=-1:
+        os.system("rm /root/Output-01.csv");
         os.system("sudo halt");
-    if response[91]=='2':
+    find = response.find('2');
+    if find !=-1:
+        os.system("rm /root/Output-01.csv");
         os.system("sudo reboot");
+
+waitForTL();
 
 t = Thread(target=wifiMon);
 t.start();
