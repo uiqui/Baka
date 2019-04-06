@@ -15,18 +15,19 @@ def printArr(instance):
     return;
 
 def waitForTL():
-    while True:
-        text = os.popen("ifconfig | grep 'UP,BROADCAST'").read();
-        if len(text.split("\n")) == 4:
-            return;
+    i=0;
+    while i!=2:
+        text = os.popen("ifconfig | grep 'wlan'").read();
+        arrText = text.split("\n");
+        i=0;
+        for line in arrText:
+            outFind = line.find('RUNNING');
+            if outFind !=-1:
+               i=i+1;
         time.sleep(2);
         
 def wifiMon():
     os.system("python /root/Documents/project/startup/airdump.py");
-
-#def wifiDown():
-#    text = os.popen("ifconfig | grep '<UP,BROADCAST,NOTRAILERS,PROMISC,ALLMULTI>'").read();
-#    wlan =text[0:5];
     
 def getChannel():
     result =[];
@@ -118,7 +119,7 @@ def postRequest(instance):
     cell =[];
     cell.append(instance);
     params = json.dumps(cell).encode('utf8');
-    url = 'http://iolab.sk:8033/~venczel/jsonParser/jsonPost.php';
+    url = 'http://iolab.sk:8033/~venczel/jsonPost.php';
     req = urllib.request.Request(url,data=params,headers={'content-type': 'application/json'});
     response = urllib.request.urlopen(req);    
     parseResponse(response.read().decode('utf8'));
