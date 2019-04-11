@@ -59,11 +59,18 @@ def calculateDistance(f,fspl):
     exp = exp + 3;    #km --> m
     d = float(math.pow(10,exp));
     return d;
-
+def systemGetScan():
+    try:
+        text = os.popen("iw mon0 scan | grep '(on mon0)\|freq: \|signal: \|SSID: '").read();
+        return text;
+    except:
+        time.sleep(1);
+        return systemGetScan();
+    
 def getUploadData():
     wifiInstanceOfData = []; #wifi
 
-    text = os.popen("iw mon0 scan | grep 'on mon0\|freq\|signal\|SSID'").read();
+    text =systemGetScan();
     arrText = text.split('\n');
     for line in arrText:
         if line != '\n':
@@ -118,8 +125,7 @@ def parseResponse(response):
         os.system("rm /root/Output-01.csv");
         os.system("sudo reboot");
 #main
-#waitForTL();
-#wifiMon();
+waitForTL();
+wifiMon();
 while True:
     getUploadData();
-    time.sleep(5);
