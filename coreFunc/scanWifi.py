@@ -60,13 +60,9 @@ def calculateDistance(f,fspl):
     d = float(math.pow(10,exp));
     return d;
 def systemGetScan():
-    try:
-        text = os.popen("iw mon0 scan | grep '(on mon0)\|freq: \|signal: \|SSID: '").read();
-        return text;
-    except:
-        time.sleep(1);
-        return systemGetScan();
-    
+    text = os.popen("iw mon0 scan | grep '(on mon0)\|freq: \|signal: \|SSID: '").read();
+    return text;
+       
 def getUploadData():
     wifiInstanceOfData = []; #wifi
 
