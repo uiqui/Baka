@@ -1,0 +1,20 @@
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=SK
+
+network={
+	ssid=""
+	psk=""
+	key_mgmt=WPA-PSK
+}
+
+network={
+	eap=PEAP
+	scan_ssid=1
+	identity=""
+	password=""
+	ssid="eduroam"
+	key_mgmt=WPA-EAP
+	phase1="peaplabel=0"
+	phase2="auth=MSCHAPV2"
+}

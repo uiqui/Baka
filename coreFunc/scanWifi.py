@@ -60,7 +60,7 @@ def calculateDistance(f,fspl):
     d = float(math.pow(10,exp));
     return d;
 def systemGetScan():
-    text = os.popen("iw mon0 scan | grep '(on mon0)\|freq: \|signal: \|SSID: '").read();
+    text = os.popen("iw wlan1 scan | grep '(on wlan1)\|freq: \|signal: \|SSID: '").read();
     return text;
        
 def getUploadData():
@@ -72,7 +72,7 @@ def getUploadData():
         if line != '\n':
             lineS = line.strip();
 
-            find = lineS.find('on mon0');
+            find = lineS.find('on wlan1');
             if find !=-1:
                 lineCell = [];
                 #mac
@@ -122,6 +122,6 @@ def parseResponse(response):
         os.system("sudo reboot");
 #main
 waitForTL();
-wifiMon();
+#wifiMon();
 while True:
     getUploadData();
