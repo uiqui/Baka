@@ -25,24 +25,6 @@ def waitForTL():
             if outFind !=-1:
                i=i+1;
         time.sleep(2);
-def findWifiInterface(arrText):
-    i = len(arrText)-1;
-
-    while i!=-1:
-        if arrText[i].find("wlan") != -1:
-            if arrText[i+1].find("50:3e:aa:5d:45:5e") == -1:
-                while True:
-                    if arrText[i][0:3] == 'phy':
-                        phy= 'phy' + arrText[i][4];                
-                        return phy;
-                    i=i-1;
-        i=i-1;
-def wifiMon():
-    text = os.popen("iw dev | grep 'phy\|wlan\|addr'").read();
-    arrText = text.split('\n');
-    phy = findWifiInterface(arrText);
-    os.system("iw phy "+ phy +" interface add mon0 type monitor");
-    os.system("ifconfig mon0 up");
 
 #fspl algorithm (km)
 # fspl - intensity of signal
@@ -61,12 +43,29 @@ def calculateDistance(f,fspl):
     return d;
 def systemGetScan():
     text = os.popen("iw wlan1 scan | grep '(on wlan1)\|freq: \|signal: \|SSID: '").read();
+
+    find = text.find('on wlan1');
+    if find ==-1:
+        return -1;
+    find = text.find('freq');
+    if find ==-1:
+        return -1;
+    find = text.find('signal');
+    if find ==-1:
+        return -1;
+    find = text.find('SSID');
+    if find ==-1:
+        return -1;
+    
     return text;
        
 def getUploadData():
     wifiInstanceOfData = []; #wifi
-
-    text =systemGetScan();
+    
+    text =-1;
+    while text==-1:
+        text =systemGetScan();
+    
     arrText = text.split('\n');
     for line in arrText:
         if line != '\n':
@@ -92,6 +91,8 @@ def getUploadData():
                 lineCell.append(calculateDistance(lineCell[1],lineCell[2]));
                 wifiInstanceOfData.append(lineCell);
                 
+    if not wifiInstanceOfData:
+        return;
     try:
         postRequest(wifiInstanceOfData);
     except:
