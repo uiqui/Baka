@@ -90,7 +90,6 @@ def getUploadData():
                 #ssid
                 lineCell.append(lineS[6:]);
                 lineCell.append(calculateDistance(lineCell[1],lineCell[2]));
-                lineCell.pop(1);
                 wifiInstanceOfData.append(lineCell);
                 
     try:
@@ -114,12 +113,12 @@ def parseResponse(response):
         return;
     find = response.find('1');
     if find !=-1:
-        os.system("rm /root/Output-01.csv");
         os.system("sudo halt");
+        time.sleep(100000);
     find = response.find('2');
     if find !=-1:
-        os.system("rm /root/Output-01.csv");
         os.system("sudo reboot");
+        time.sleep(100000);
 #main
 waitForTL();
 #wifiMon();
