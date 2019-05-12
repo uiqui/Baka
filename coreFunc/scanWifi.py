@@ -16,7 +16,7 @@ def printArr(instance):
 
 def waitForTL():
     i=0;
-    while i!=2:
+    while i!=1:
         text = os.popen("ifconfig | grep 'wlan'").read();
         arrText = text.split("\n");
         i=0;
@@ -42,29 +42,14 @@ def calculateDistance(f,fspl):
     d = float(math.pow(10,exp));
     return d;
 def systemGetScan():
-    text = os.popen("iw wlan1 scan | grep '(on wlan1)\|freq: \|signal: \|SSID: '").read();
-
-    find = text.find('on wlan1');
-    if find ==-1:
-        return -1;
-    find = text.find('freq');
-    if find ==-1:
-        return -1;
-    find = text.find('signal');
-    if find ==-1:
-        return -1;
-    find = text.find('SSID');
-    if find ==-1:
-        return -1;
-    
+    text = os.popen("iw wlan1 scan | grep '(on wlan1)\|freq: \|signal: \|SSID: '").read();   
+    time.sleep(1);
     return text;
        
 def getUploadData():
     wifiInstanceOfData = []; #wifi
     
-    text =-1;
-    while text==-1:
-        text =systemGetScan();
+    text =systemGetScan();
     
     arrText = text.split('\n');
     for line in arrText:
