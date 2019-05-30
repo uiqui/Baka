@@ -4,15 +4,6 @@ import os;
 import math;
 import json;
 import urllib.request;
-from threading import Thread;
-
-def printArr(instance):
-    for cell in instance:
-        for celll in cell:
-            print(str(celll) + "/");
-        print("**************");
-    print("///////////////////////////////////////");
-    return;
 
 def waitForTL():
     i=0;
